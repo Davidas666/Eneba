@@ -37,7 +37,7 @@ function AppContent() {
           
           // Fetch user data using the cookie
           console.log(' Fetching user data from /users/profile...');
-          const response = await fetch('http://localhost:5000/api/v1/users/profile', {
+          const response = await fetch('/api/v1/users/profile', {
             method: 'GET',
             credentials: 'include',
           });

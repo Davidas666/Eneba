@@ -13,7 +13,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
 
   const handleGoogleLogin = () => {
     // Redirect to Google OAuth
-    window.location.href = 'http://localhost:5000/api/v1/auth/google';
+    window.location.href = '/api/v1/auth/google';
   };
 
   const handleSubmit = async (e) => {

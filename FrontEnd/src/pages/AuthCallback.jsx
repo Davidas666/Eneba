@@ -10,7 +10,7 @@ const AuthCallback = () => {
       try {
         // After OAuth callback, backend should set cookies
         // We can fetch current user info
-        const response = await fetch('http://localhost:5000/api/v1/users/me', {
+        const response = await fetch('/api/v1/users/me', {
           method: 'GET',
           credentials: 'include',
         });
