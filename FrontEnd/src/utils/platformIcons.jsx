@@ -22,7 +22,7 @@ export function getPlatformIcon(platform) {
     'EA App': eaIcon,
   };
 
-  return platformMap[platform] || steamIcon;
+  return platformMap[platform] || eaIcon;
 };
 
 export function getPlatformText(platform) {
