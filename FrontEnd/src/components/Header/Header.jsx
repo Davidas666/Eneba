@@ -122,7 +122,7 @@ return (
               onClick={() => setIsRegisterModalOpen(true)}
               className="border-none text-white cursor-pointer px-3 py-2 rounded-md text-sm transition-all duration-200 hover:text-[rgba(250,214,24,1)]"
             >
-                Register
+                Register.
             </button>
             </div>
         )}
