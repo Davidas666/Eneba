@@ -37,7 +37,7 @@ export function getPlatformText(platform) {
     'Epic Games': 'Epic',
     'GOG': 'GOG',
     'Rockstar Games': 'Rockstar',
-    'EA App': 'EA',
+    'EA': 'EA App',
   };
 
   return platformTextMap[platform] || platform;
