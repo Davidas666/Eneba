@@ -108,7 +108,7 @@ const CartItem = ({ item, onRemove, onUpdate, isFavorite: initialIsFavorite = fa
 
         {/* Pricing info */}
         <div className="flex items-center gap-2">
-          <p className="text-xs text-gray-400">Skaitmeninė prekė</p>
+          <p className="text-xs text-gray-400">Digital Product</p>
           {discount > 0 && (
             <Badge variant="discount" className="text-xs">
               -{discount.toFixed(0)}%

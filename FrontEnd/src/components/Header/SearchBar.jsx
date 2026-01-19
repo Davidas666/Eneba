@@ -33,7 +33,7 @@ const SearchBar = forwardRef(({ onSearch }, ref) => {
       <Icon name="search" size={20} className="text-white/60 mr-3 flex-shrink-0" />
       <input
         type="text"
-        className="flex-1 bg-transparent border-0 outline-none text-white text-sm placeholder:text-gray-400"
+        className="flex-1 bg-transparent border-0 outline-none text-white text-sm placeholder:text-gray-400 text-base"
         placeholder="Search for games, top-ups and more"
         value={searchValue}
         onChange={handleChange}
