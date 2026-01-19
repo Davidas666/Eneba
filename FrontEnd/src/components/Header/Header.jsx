@@ -16,6 +16,7 @@ const searchBarRef = useRef(null);
 const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
+const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 const [isLoggedIn, setIsLoggedIn] = useState(() => {
   // Initialize state from localStorage
   const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -62,19 +63,23 @@ const handleCartClick = () => {
 
 return (
 <>
-    <header className="bg-primary-purple text-white z-[1000]">
-    <div className="flex items-center justify-between px-8 py-4 max-w-300 mx-auto gap-6">
+    <header className="bg-primary-purple text-white z-[1000] sticky top-0">
+    <div className="flex items-center justify-between px-4 md:px-8 py-4 max-w-300 mx-auto gap-4 md:gap-6">
+        {/* Logo */}
         <div className="flex items-center shrink-0">
         <div className="flex items-center gap-2 cursor-pointer" onClick={handleLogoClick}>
-            <img src={EnebaLogo} alt="Eneba logo" className="h-14 w-auto" />
+            <img src={EnebaLogo} alt="Eneba logo" className="h-10 md:h-14 w-auto" />
         </div>
         </div>
 
-        <div className="flex-1 max-w-225 flex items-center gap-3">
+        {/* Search Bar and Language - Hidden on mobile */}
+        <div className="hidden md:flex flex-1 max-w-225 items-center gap-3">
         <SearchBar ref={searchBarRef} onSearch={onSearch} />
         <LanguageCurrencySelector />
         </div>
-        <div className="flex items-center gap-3 shrink-0">
+
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-3 shrink-0">
 
         <div className="relative">
         <button 
@@ -126,18 +131,99 @@ return (
             </button>
             </div>
         )}
+        </div>
+
+        {/* Mobile Menu Button */}
+        <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden bg-transparent border-0 text-white cursor-pointer p-2 rounded-md flex items-center justify-center"
+        >
+            <Icon name={isMobileMenuOpen ? "close" : "menu"} size={24} />
+        </button>
+    </div>
+
+    {/* Mobile Search Bar */}
+    <div className="md:hidden px-4 pb-3 border-t border-white/10">
+        <SearchBar ref={searchBarRef} onSearch={onSearch} />
+    </div>
+
+    {/* Mobile Menu */}
+    {isMobileMenuOpen && (
+        <div className="md:hidden bg-primary-purple border-t border-white/10">
+            <div className="px-4 py-4 space-y-3">
+                <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                    <LanguageCurrencySelector />
+                </div>
+
+                <button 
+                    onClick={() => {
+                        setIsFavoritesOpen(!isFavoritesOpen);
+                    }}
+                    className="w-full text-left bg-transparent border-0 text-white cursor-pointer p-2 rounded-md flex items-center gap-3 transition-all duration-200 hover:text-[rgba(250,214,24,1)]"
+                >
+                    <Icon name="heart" size={20} />
+                    <span>Favorites</span>
+                </button>
+                
+                <button 
+                    onClick={() => {
+                        handleCartClick();
+                        setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full text-left bg-transparent border-0 text-white cursor-pointer p-2 rounded-md flex items-center gap-3 transition-all duration-200 hover:text-[rgba(250,214,24,1)]"
+                >
+                    <Icon name="cart" size={20} />
+                    <span>Cart</span>
+                </button>
+
+                <div className="border-t border-white/10 pt-3">
+                    {isLoggedIn ? (
+                        <button 
+                            onClick={() => {
+                                handleLogout();
+                                setIsMobileMenuOpen(false);
+                            }}
+                            className="w-full text-left bg-transparent border-0 text-white cursor-pointer p-2 rounded-md transition-all duration-200 hover:text-[rgba(250,214,24,1)]"
+                        >
+                            Log Out
+                        </button>
+                    ) : (
+                        <div className="space-y-2">
+                            <button 
+                                onClick={() => {
+                                    setIsLoginModalOpen(true);
+                                    setIsMobileMenuOpen(false);
+                                }}
+                                className="w-full text-left border-none text-white cursor-pointer p-2 rounded-md text-sm transition-all duration-200 hover:text-[rgba(250,214,24,1)]"
+                            >
+                                Log In
+                            </button>
+                            <button 
+                                onClick={() => {
+                                    setIsRegisterModalOpen(true);
+                                    setIsMobileMenuOpen(false);
+                                }}
+                                className="w-full text-left border-none text-white cursor-pointer p-2 rounded-md text-sm transition-all duration-200 hover:text-[rgba(250,214,24,1)]"
+                            >
+                                Register
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    )}
+
     <LoginModal 
       isOpen={isLoginModalOpen} 
       onClose={() => setIsLoginModalOpen(false)}
-      onLoginSuccess={handleLoginSuccess}
+      onRegisterSuccess={handleLoginSuccess}
     />
     <RegisterModal 
       isOpen={isRegisterModalOpen} 
       onClose={() => setIsRegisterModalOpen(false)}
       onRegisterSuccess={handleLoginSuccess}
     />
-        </div>
-    </div>
     </header>
 </>
 );
