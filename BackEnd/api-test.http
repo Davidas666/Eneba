@@ -1,0 +1,350 @@
+### API Testing File
+### Use with REST Client extension (humao.rest-client) in VS Code
+### Or import to Postman/Thunder Client
+
+@baseUrl = http://localhost:5000/api/v1
+@contentType = application/json
+
+###############################################
+# AUTHENTICATION ENDPOINTS
+###############################################
+
+### Google OAuth Login (Open this URL in browser)
+# GET {{baseUrl}}/auth/google
+
+### 1. Register New User (Buyer)
+POST {{baseUrl}}/users/signup HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "email": "buyer@test.com",
+  "password": "password123",
+  "firstName": "John",
+  "lastName": "Doe",
+  "role": "buyer"
+}
+
+### 2. Register New User (Seller)
+POST {{baseUrl}}/users/signup HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "email": "seller@test.com",
+  "password": "password123",
+  "firstName": "Jane",
+  "lastName": "Smith",
+  "role": "seller"
+}
+
+### 3. Login (Buyer)
+POST {{baseUrl}}/users/login HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "email": "buyer@test.com",
+  "password": "password123"
+}
+
+### 4. Login (Seller)
+POST {{baseUrl}}/users/login HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "email": "seller@test.com",
+  "password": "password123"
+}
+
+### 5. Logout (Protected Route)
+GET {{baseUrl}}/users/logout HTTP/1.1
+
+### 6. Test Protected Route (after login)
+GET {{baseUrl}}/users/profile HTTP/1.1
+
+###############################################
+# VALIDATION TESTS
+###############################################
+
+### Test - Try to create Admin (should FAIL with 403)
+POST {{baseUrl}}/users/signup HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "email": "hacker@test.com",
+  "password": "password123",
+  "firstName": "Hacker",
+  "lastName": "McHack",
+  "role": "admin"
+}
+
+### Test - Invalid Email
+POST {{baseUrl}}/users/signup HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "email": "invalid-email",
+  "password": "password123",
+  "firstName": "Test",
+  "lastName": "User"
+}
+
+### Test - Short Password
+POST {{baseUrl}}/users/signup HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "email": "test@test.com",
+  "password": "123",
+  "firstName": "Test",
+  "lastName": "User"
+}
+
+### Test - Duplicate Email
+POST {{baseUrl}}/users/signup HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "email": "buyer@test.com",
+  "password": "password123",
+  "firstName": "Test",
+  "lastName": "User"
+}
+
+### Test - Wrong Password
+POST {{baseUrl}}/users/login HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "email": "buyer@test.com",
+  "password": "wrongpassword"
+}
+
+### Test - Non-existent User
+POST {{baseUrl}}/users/login HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "email": "nonexistent@test.com",
+  "password": "password123"
+}
+
+###############################################
+# NOTES
+###############################################
+
+# 1. Install REST Client extension in VS Code:
+#    - Open Extensions (Ctrl+Shift+X)
+#    - Search "REST Client" by Humao
+#    - Click Install
+
+# 2. How to use:
+#    - Click "Send Request" above each request
+#    - Response will appear in new tab
+
+# 3. Cookie handling:
+#    - REST Client automatically saves cookies
+#    - After login, cookies are sent with subsequent requests
+#    - Logout clears the cookie
+
+# 4. For Postman:
+#    - Import this file: File > Import > Raw text
+#    - OR manually create requests using these endpoints
+
+# 5. For Thunder Client:
+#    - Create new request
+#    - Copy URL and body from examples above
+#    - Set method (POST/GET)
+#    - Add Content-Type: application/json header
+
+###############################################
+# GAME ENDPOINTS
+###############################################
+
+###############################################
+# PUBLIC MARKETPLACE API
+###############################################
+
+### Get all available listings (marketplace)
+GET {{baseUrl}}/list HTTP/1.1
+
+### Search listings by game name (fuzzy search)
+GET {{baseUrl}}/list?search=dead_ret HTTP/1.1
+
+### Search with pagination
+GET {{baseUrl}}/list?search=theft&limit=10&page=1 HTTP/1.1
+
+###############################################
+# HELPER ENDPOINTS
+###############################################
+
+### Get all platforms (optional - to see available options)
+GET {{baseUrl}}/platforms HTTP/1.1
+
+### Get all regions (optional - to see available options)
+GET {{baseUrl}}/regions HTTP/1.1
+
+###############################################
+# SELLER ENDPOINTS
+###############################################
+
+### STEP 1: Login as Seller first!
+POST {{baseUrl}}/users/login HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "email": "seller@test.com",
+  "password": "password123"
+}
+
+### STEP 2: Create Game (Seller only)
+# @name createGame
+POST {{baseUrl}}/games HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "title": "Red Dead Redemption 2",
+  "description": "America, 1899. The end of the Wild West era has begun. After a robbery goes badly wrong in the western town of Blackwater, Arthur Morgan and the Van der Linde gang are forced to flee.",
+  "publisher": "Rockstar Games",
+  "developer": "Rockstar Studios",
+  "releaseDate": "2018-10-26",
+  "imageUrl": "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/4xJ8XB3bi888QTLZYdl7Oi0s.png"
+}
+
+### Create another game
+POST {{baseUrl}}/games HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "title": "Grand Theft Auto V",
+  "description": "When a young street hustler, a retired bank robber and a terrifying psychopath find themselves entangled with some of the most frightening and deranged elements of the criminal underworld, the U.S. government and the entertainment industry, they must pull off a series of dangerous heists to survive.",
+  "publisher": "Rockstar Games",
+  "developer": "Rockstar North",
+  "releaseDate": "2013-09-17",
+  "imageUrl": "https://upload.wikimedia.org/wikipedia/en/a/a5/Grand_Theft_Auto_V.png"
+}
+
+### Get all games
+GET {{baseUrl}}/games HTTP/1.1
+
+### Search games
+GET {{baseUrl}}/games/search?q=red HTTP/1.1
+
+### Get game by ID 
+# Replace UUID with actual game ID from createGame response
+GET {{baseUrl}}/games/PASTE_GAME_ID_HERE HTTP/1.1
+
+### STEP 3: Create Listing (Seller only)
+# ✨ Easy! Just use region CODE (EU, US, GLOBAL) and platform NAME (PC, PS5, Xbox)
+# Replace gameId with actual ID from STEP 2 response
+POST {{baseUrl}}/listings HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "gameId": "7b497b25-d9b8-426d-bbb0-e6a871187749",
+  "platform": "PC",
+  "region": "EU",
+  "price": 29.99,
+  "discountPercentage": 15,
+  "stock": 100
+}
+
+### Create listing - Global region, PS5
+POST {{baseUrl}}/listings HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "gameId": "PASTE_GAME_ID_HERE",
+  "platform": "PS5",
+  "region": "GLOBAL",
+  "price": 39.99,
+  "discountPercentage": 10,
+  "stock": 50
+}
+
+### Create listing - US region, Steam
+POST {{baseUrl}}/listings HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "gameId": "2325a159-9ea7-4007-babd-ea4c47a0c76b",
+  "platform": "Steam",
+  "region": "US",
+  "price": 27.99,
+  "stock": 200
+}
+
+### Get my listings (Seller only)
+GET {{baseUrl}}/my-listings HTTP/1.1
+
+### Update listing (Seller only - replace with actual listing ID)
+PATCH {{baseUrl}}/listings/01234567-89ab-cdef-0123-456789abcdef HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "price": 24.99,
+  "discountPercentage": 20,
+  "stock": 150
+}
+
+### Delete listing (Seller only - replace with actual listing ID)
+DELETE {{baseUrl}}/listings/01234567-89ab-cdef-0123-456789abcdef HTTP/1.1
+
+###############################################
+# FAVORITES / WISHLIST ENDPOINTS
+###############################################
+
+### Get my favorites (requires login as buyer)
+GET {{baseUrl}}/favorites HTTP/1.1
+
+### Add game to favorites (requires login)
+POST {{baseUrl}}/favorites HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "gameId": "7b497b25-d9b8-426d-bbb0-e6a871187749"
+}
+
+### Check if game is in favorites
+GET {{baseUrl}}/favorites/7b497b25-d9b8-426d-bbb0-e6a871187749/check HTTP/1.1
+
+### Remove game from favorites
+DELETE {{baseUrl}}/favorites/7b497b25-d9b8-426d-bbb0-e6a871187749 HTTP/1.1
+
+###############################################
+# CART ENDPOINTS (BUYER ONLY)
+###############################################
+
+### Get my cart (requires login as buyer)
+GET {{baseUrl}}/cart HTTP/1.1
+
+### Add item to cart
+POST {{baseUrl}}/cart HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "listingId": "7019f2de-ba0b-4781-93b2-3a541de8feca",
+  "quantity": 1
+}
+
+### Add same item again (will increment quantity to 2)
+POST {{baseUrl}}/cart HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "listingId": "7019f2de-ba0b-4781-93b2-3a541de8feca",
+  "quantity": 1
+}
+
+### Update item quantity
+PATCH {{baseUrl}}/cart/7019f2de-ba0b-4781-93b2-3a541de8feca HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "quantity": 3
+}
+
+### Remove item from cart
+DELETE {{baseUrl}}/cart/7019f2de-ba0b-4781-93b2-3a541de8feca HTTP/1.1
+
+### Clear entire cart
+DELETE {{baseUrl}}/cart HTTP/1.1
+
