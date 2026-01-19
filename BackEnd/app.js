@@ -10,9 +10,26 @@ const passport = require('./src/config/passport');
 const app = express();
 const cors = require('cors');
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://davidas.pro',
+  'https://www.davidas.pro'
+];
+
 app.use(cors({
-  origin: 'http://localhost:5173', 
-  credentials: true
+  origin: function (origin, callback) {
+    // Leisti server-to-server arba curl be origin
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = `CORS blocked for origin: ${origin}`;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
 app.use(express.json());
