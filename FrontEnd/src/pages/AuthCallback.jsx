@@ -22,16 +22,16 @@ const AuthCallback = () => {
           localStorage.setItem('user', JSON.stringify(data.data));
           localStorage.setItem('isLoggedIn', 'true');
           
-          console.log('✅ Google login successful');
+          console.log('Google login successful');
           
           // Redirect to home page
           navigate('/');
         } else {
-          console.error('❌ Auth check failed');
+          console.error('Auth check failed');
           navigate('/');
         }
       } catch (error) {
-        console.error('❌ Auth callback error:', error);
+        console.error('Auth callback error:', error);
         navigate('/');
       }
     };

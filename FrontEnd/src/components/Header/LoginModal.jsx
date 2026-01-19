@@ -28,7 +28,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
       localStorage.setItem('user', JSON.stringify(response.data));
       localStorage.setItem('isLoggedIn', 'true');
       
-      console.log('✅ Login successful', response.data);
+      console.log('Login successful', response.data);
       
       // Close modal first
       onClose();

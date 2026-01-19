@@ -206,7 +206,7 @@ exports.googleCallback = async (req, res, next) => {
         // User is already authenticated by passport
         const user = req.user;
         
-        console.log('✅ Google OAuth successful for:', user.email);
+        console.log('Google OAuth successful for user:', user.email);
         
         // Generate JWT token
         const token = signToken(user.id);
@@ -218,10 +218,10 @@ exports.googleCallback = async (req, res, next) => {
         const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
         const redirectUrl = `${frontendUrl}/?token=${token}`;
         
-        console.log('🔄 Redirecting to:', redirectUrl);
+        console.log('Redirecting to:', redirectUrl);
         res.redirect(redirectUrl);
     } catch (error) {
-        console.error('❌ Google OAuth error:', error);
+        console.error('Google OAuth error:', error);
         const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
         res.redirect(`${frontendUrl}/auth?error=authentication_failed`);
     }

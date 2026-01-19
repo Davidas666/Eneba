@@ -11,7 +11,7 @@ async function checkListings() {
         console.log('Found listings:', listings);
         
         if (listings.length === 0) {
-            console.log('\n❌ No listing found with this ID!');
+            console.log('\nNo listing found with this ID!');
             console.log('Checking first 5 listings:');
             const allListings = await sql`
                 SELECT id, game_id, price 

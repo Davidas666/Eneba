@@ -18,7 +18,7 @@ function AppContent() {
       const token = urlParams.get('token');
       const currentPath = window.location.pathname;
       
-      console.log('🔍 Checking OAuth:', { 
+      console.log('Checking OAuth:', { 
         token: token ? token.substring(0, 20) + '...' : 'none', 
         path: currentPath,
         fullUrl: window.location.href 
@@ -29,7 +29,7 @@ function AppContent() {
         
         // Save token immediately
         localStorage.setItem('token', token);
-        console.log('💾 Token saved to localStorage');
+        console.log('Token saved to localStorage');
         
         try {
           // Set cookie with token first
