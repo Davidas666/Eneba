@@ -4,6 +4,7 @@ const gameRouter = require('./src/routes/gameRoutes.js');
 const favoriteRouter = require('./src/routes/favoriteRoutes.js');
 const cartRouter = require('./src/routes/cartRoutes.js');
 const authRouter = require('./src/routes/authRoutes.js');
+const visitorRouter = require('./src/routes/visitorRoutes.js');
 const AppError = require("./src/utils/appError.js");
 const cookieParser = require('cookie-parser');
 const passport = require('./src/config/passport');
@@ -60,6 +61,7 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1', gameRouter);
 app.use('/api/v1', favoriteRouter);
 app.use('/api/v1', cartRouter);
+app.use('/api/visitor', visitorRouter);
 
 
 app.all(/(.*)/, (req, res, next) => {
