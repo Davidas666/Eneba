@@ -29,6 +29,9 @@ const sendVisitorInfoToTelegram = async (visitorData) => {
       parse_mode: 'HTML'
     });
 
+    console.log('DEBUG: JSON data to send:', data);
+    console.log('DEBUG: JSON data length:', data.length);
+
     const options = {
       hostname: 'api.telegram.org',
       path: `/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
