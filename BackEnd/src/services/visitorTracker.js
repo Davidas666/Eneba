@@ -14,6 +14,12 @@ const sendVisitorInfoToTelegram = async (visitorData) => {
 
     const message = formatVisitorMessage(visitorData);
     
+    // Validate that message is not empty
+    if (!message || message.trim().length === 0) {
+      console.error('Žinutė negali būti tuščia');
+      return;
+    }
+    
     const data = JSON.stringify({
       chat_id: TELEGRAM_CHAT_ID,
       text: message,
@@ -62,24 +68,13 @@ const sendVisitorInfoToTelegram = async (visitorData) => {
 
 // Funkcija formatuojanti žinutę
 const formatVisitorMessage = (data) => {
+  if (!data) {
+    return 'Nauja svetainės vizitas - Nėra duomenų';
+  }
+  
   const timestamp = new Date().toLocaleString('lt-LT');
   
-  return `
-<b>🌐 Nauja svetainės vizitas</b>
-
-<b>⏰ Laikas:</b> ${timestamp}
-<b>🌍 IP Adresas:</b> ${data.ip || 'N/A'}
-<b>🌐 Host:</b> ${data.host || 'N/A'}
-<b>🔗 Referrer:</b> ${data.referrer || 'Tiesiogiai'}
-<b>📱 User Agent:</b> ${data.userAgent || 'N/A'}
-
-<b>🖥️ Naršyklė:</b> ${data.browser || 'Nežinoma'}
-<b>💻 Operacinė sistema:</b> ${data.os || 'Nežinoma'}
-<b>📲 Įrenginys:</b> ${data.deviceType || 'Nežinoma'}
-
-<b>🌎 Vieta:</b> ${data.country || 'Nežinoma'}, ${data.city || 'Nežinoma'}
-<b>🕐 Laiko zonė:</b> ${data.timezone || 'N/A'}
-  `.trim();
+  return `<b>Nauja svetainės vizitas</b>\n\n<b> Laikas:</b> ${timestamp}\n<b>🌍 IP Adresas:</b> ${data.ip || 'N/A'}\n<b>🌐 Host:</b> ${data.host || 'N/A'}\n<b>🔗 Referrer:</b> ${data.referrer || 'Tiesiogiai'}\n<b>📱 User Agent:</b> ${data.userAgent || 'N/A'}\n\n<b>🖥️ Naršyklė:</b> ${data.browser || 'Nežinoma'}\n<b>💻 Operacinė sistema:</b> ${data.os || 'Nežinoma'}\n<b>📲 Įrenginys:</b> ${data.deviceType || 'Nežinoma'}\n\n<b>🌎 Vieta:</b> ${data.country || 'Nežinoma'}, ${data.city || 'Nežinoma'}\n<b>🕐 Laiko zonė:</b> ${data.timezone || 'N/A'}`;
 };
 
 module.exports = {
