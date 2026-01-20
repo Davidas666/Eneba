@@ -8,7 +8,6 @@ const visitorRouter = require('./src/routes/visitorRoutes.js');
 const AppError = require("./src/utils/appError.js");
 const cookieParser = require('cookie-parser');
 const passport = require('./src/config/passport');
-const { apiActivityMiddleware } = require('./src/services/apiTracker.js');
 const app = express();
 const cors = require('cors');
 
@@ -40,9 +39,6 @@ app.use(cookieParser());
 
 // Initialize Passport
 app.use(passport.initialize());
-
-// API Activity Tracker Middleware - trackina visus API requestus
-app.use('/api', apiActivityMiddleware);
 
 app.use((req, res, next) => {
     console.log("labas is middleware");
