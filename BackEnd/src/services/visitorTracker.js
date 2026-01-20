@@ -14,12 +14,9 @@ const sendVisitorInfoToTelegram = async (visitorData) => {
 
     const message = formatVisitorMessage(visitorData);
     
-    console.log('DEBUG: Formatted message:', message);
-    console.log('DEBUG: Message length:', message ? message.length : 'null/undefined');
-    
     // Validate that message is not empty
     if (!message || message.trim().length === 0) {
-      console.error('Žinutė negali būti tuščia. VisitorData:', visitorData);
+      console.error('Žinutė negali būti tuščia');
       return;
     }
     
@@ -29,12 +26,8 @@ const sendVisitorInfoToTelegram = async (visitorData) => {
       parse_mode: 'HTML'
     });
 
-    console.log('DEBUG: JSON data to send:', data);
-    console.log('DEBUG: JSON data length:', data.length);
-
     // Use Buffer.byteLength for correct Content-Length with emoji/UTF-8
     const contentLength = Buffer.byteLength(data, 'utf8');
-    console.log('DEBUG: Content-Length (bytes):', contentLength);
 
     const options = {
       hostname: 'api.telegram.org',
@@ -99,15 +92,7 @@ const formatVisitorMessage = (data) => {
       '<b>🕐 Laiko zonė:</b> ' + (data?.timezone || 'N/A')
     ];
     
-    const message = lines.join('\n');
-    
-    if (!message || message.trim().length === 0) {
-      console.warn('Žinutė tuščia, grąžinama numatytoji');
-      return '🌐 Nauja svetainės vizita';
-    }
-    
-    console.log('DEBUG: Final message for Telegram:', message);
-    return message;
+    return lines.join('\n');
   } catch (error) {
     console.error('Klaida formatuojant žinutę:', error);
     return '🌐 Nauja svetainės vizita';
