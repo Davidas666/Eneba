@@ -74,24 +74,32 @@ const formatVisitorMessage = (data) => {
   try {
     const timestamp = new Date().toLocaleString('lt-LT');
     
-    const message = 
-      '<b>🌐 Nauja svetainės vizitas</b>\n\n' +
-      '<b>⏰ Laikas:</b> ' + timestamp + '\n' +
-      '<b>🌍 IP Adresas:</b> ' + (data?.ip || 'N/A') + '\n' +
-      '<b>🌐 Host:</b> ' + (data?.host || 'N/A') + '\n' +
-      '<b>🔗 Referrer:</b> ' + (data?.referrer || 'Tiesiogiai') + '\n' +
-      '<b>📱 User Agent:</b> ' + (data?.userAgent || 'N/A') + '\n\n' +
-      '<b>🖥️ Naršyklė:</b> ' + (data?.browser || 'Nežinoma') + '\n' +
-      '<b>💻 Operacinė sistema:</b> ' + (data?.os || 'Nežinoma') + '\n' +
-      '<b>📲 Įrenginys:</b> ' + (data?.deviceType || 'Nežinoma') + '\n\n' +
-      '<b>🌎 Vieta:</b> ' + (data?.country || 'Nežinoma') + ', ' + (data?.city || 'Nežinoma') + '\n' +
-      '<b>🕐 Laiko zonė:</b> ' + (data?.timezone || 'N/A');
+    // Use array with join to create proper line breaks
+    const lines = [
+      '<b>🌐 Nauja svetainės vizitas</b>',
+      '',
+      '<b>⏰ Laikas:</b> ' + timestamp,
+      '<b>🌍 IP Adresas:</b> ' + (data?.ip || 'N/A'),
+      '<b>🌐 Host:</b> ' + (data?.host || 'N/A'),
+      '<b>🔗 Referrer:</b> ' + (data?.referrer || 'Tiesiogiai'),
+      '<b>📱 User Agent:</b> ' + (data?.userAgent || 'N/A'),
+      '',
+      '<b>🖥️ Naršyklė:</b> ' + (data?.browser || 'Nežinoma'),
+      '<b>💻 Operacinė sistema:</b> ' + (data?.os || 'Nežinoma'),
+      '<b>📲 Įrenginys:</b> ' + (data?.deviceType || 'Nežinoma'),
+      '',
+      '<b>🌎 Vieta:</b> ' + (data?.country || 'Nežinoma') + ', ' + (data?.city || 'Nežinoma'),
+      '<b>🕐 Laiko zonė:</b> ' + (data?.timezone || 'N/A')
+    ];
+    
+    const message = lines.join('\n');
     
     if (!message || message.trim().length === 0) {
       console.warn('Žinutė tuščia, grąžinama numatytoji');
       return '🌐 Nauja svetainės vizita';
     }
     
+    console.log('DEBUG: Final message for Telegram:', message);
     return message;
   } catch (error) {
     console.error('Klaida formatuojant žinutę:', error);
