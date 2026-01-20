@@ -68,13 +68,32 @@ const sendVisitorInfoToTelegram = async (visitorData) => {
 
 // Funkcija formatuojanti žinutę
 const formatVisitorMessage = (data) => {
-  if (!data) {
-    return 'Nauja svetainės vizitas - Nėra duomenų';
+  try {
+    const timestamp = new Date().toLocaleString('lt-LT');
+    
+    const message = 
+      '<b>🌐 Nauja svetainės vizitas</b>\n\n' +
+      '<b>⏰ Laikas:</b> ' + timestamp + '\n' +
+      '<b>🌍 IP Adresas:</b> ' + (data?.ip || 'N/A') + '\n' +
+      '<b>🌐 Host:</b> ' + (data?.host || 'N/A') + '\n' +
+      '<b>🔗 Referrer:</b> ' + (data?.referrer || 'Tiesiogiai') + '\n' +
+      '<b>📱 User Agent:</b> ' + (data?.userAgent || 'N/A') + '\n\n' +
+      '<b>🖥️ Naršyklė:</b> ' + (data?.browser || 'Nežinoma') + '\n' +
+      '<b>💻 Operacinė sistema:</b> ' + (data?.os || 'Nežinoma') + '\n' +
+      '<b>📲 Įrenginys:</b> ' + (data?.deviceType || 'Nežinoma') + '\n\n' +
+      '<b>🌎 Vieta:</b> ' + (data?.country || 'Nežinoma') + ', ' + (data?.city || 'Nežinoma') + '\n' +
+      '<b>🕐 Laiko zonė:</b> ' + (data?.timezone || 'N/A');
+    
+    if (!message || message.trim().length === 0) {
+      console.warn('Žinutė tuščia, grąžinama numatytoji');
+      return '🌐 Nauja svetainės vizita';
+    }
+    
+    return message;
+  } catch (error) {
+    console.error('Klaida formatuojant žinutę:', error);
+    return '🌐 Nauja svetainės vizita';
   }
-  
-  const timestamp = new Date().toLocaleString('lt-LT');
-  
-  return `<b>Nauja svetainės vizitas</b>\n\n<b> Laikas:</b> ${timestamp}\n<b>🌍 IP Adresas:</b> ${data.ip || 'N/A'}\n<b>🌐 Host:</b> ${data.host || 'N/A'}\n<b>🔗 Referrer:</b> ${data.referrer || 'Tiesiogiai'}\n<b>📱 User Agent:</b> ${data.userAgent || 'N/A'}\n\n<b>🖥️ Naršyklė:</b> ${data.browser || 'Nežinoma'}\n<b>💻 Operacinė sistema:</b> ${data.os || 'Nežinoma'}\n<b>📲 Įrenginys:</b> ${data.deviceType || 'Nežinoma'}\n\n<b>🌎 Vieta:</b> ${data.country || 'Nežinoma'}, ${data.city || 'Nežinoma'}\n<b>🕐 Laiko zonė:</b> ${data.timezone || 'N/A'}`;
 };
 
 module.exports = {
