@@ -1,4 +1,4 @@
-const axios = require('axios');
+const https = require('https');
 
 // Telegram bot konfiguracija
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
@@ -14,16 +14,47 @@ const sendVisitorInfoToTelegram = async (visitorData) => {
 
     const message = formatVisitorMessage(visitorData);
     
-    await axios.post(
-      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
-      {
-        chat_id: TELEGRAM_CHAT_ID,
-        text: message,
-        parse_mode: 'HTML'
-      }
-    );
+    const data = JSON.stringify({
+      chat_id: TELEGRAM_CHAT_ID,
+      text: message,
+      parse_mode: 'HTML'
+    });
 
-    console.log('Lankytojo duomenys sėkmingai išsiųsti į Telegram');
+    const options = {
+      hostname: 'api.telegram.org',
+      path: `/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': data.length
+      }
+    };
+
+    return new Promise((resolve, reject) => {
+      const req = https.request(options, (res) => {
+        let responseData = '';
+        res.on('data', (chunk) => {
+          responseData += chunk;
+        });
+        res.on('end', () => {
+          if (res.statusCode === 200) {
+            console.log('Lankytojo duomenys sėkmingai išsiųsti į Telegram');
+            resolve(true);
+          } else {
+            console.error('Telegram klaida:', responseData);
+            reject(new Error(responseData));
+          }
+        });
+      });
+
+      req.on('error', (error) => {
+        console.error('Klaida siunčiant duomenis į Telegram:', error.message);
+        reject(error);
+      });
+
+      req.write(data);
+      req.end();
+    });
   } catch (error) {
     console.error('Klaida siunčiant duomenis į Telegram:', error.message);
   }
