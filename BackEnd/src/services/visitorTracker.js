@@ -32,13 +32,17 @@ const sendVisitorInfoToTelegram = async (visitorData) => {
     console.log('DEBUG: JSON data to send:', data);
     console.log('DEBUG: JSON data length:', data.length);
 
+    // Use Buffer.byteLength for correct Content-Length with emoji/UTF-8
+    const contentLength = Buffer.byteLength(data, 'utf8');
+    console.log('DEBUG: Content-Length (bytes):', contentLength);
+
     const options = {
       hostname: 'api.telegram.org',
       path: `/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Content-Length': data.length
+        'Content-Length': contentLength
       }
     };
 
