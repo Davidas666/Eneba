@@ -14,9 +14,12 @@ const sendVisitorInfoToTelegram = async (visitorData) => {
 
     const message = formatVisitorMessage(visitorData);
     
+    console.log('DEBUG: Formatted message:', message);
+    console.log('DEBUG: Message length:', message ? message.length : 'null/undefined');
+    
     // Validate that message is not empty
     if (!message || message.trim().length === 0) {
-      console.error('Žinutė negali būti tuščia');
+      console.error('Žinutė negali būti tuščia. VisitorData:', visitorData);
       return;
     }
     
